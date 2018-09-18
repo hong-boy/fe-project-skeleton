@@ -2,3 +2,4 @@
 .idea/
 .history/
 *.log
+node_modules/

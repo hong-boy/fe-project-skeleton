@@ -3,7 +3,7 @@ const program = require("commander");
 const path = require("path");
 const mkdir = require("mkdirp");
 const fs = require("mz/fs");
-const kopy = require('kopy');
+const kopy = require("kopy");
 
 // 获取项目根路径
 const ROOT_DIR = path.join(__dirname, "..");
@@ -24,19 +24,13 @@ console.log(dest);
 
 // 生成目标目录
 // TODO - 判断目标目录是否为空
-//如果目标目录为空或者不存在，则直接创建
-//如果目标目录不为空，则提示可能会覆盖同名文件
+// 如果目标目录为空或者不存在，则直接创建
+// 如果目标目录不为空，则提示可能会覆盖同名文件
 mkdir(dest);
 
 kopy(TEMPLATES_DIR, dest, {
     template: require("jstransformer-handlebars"),
     data: {
-      foo: true
+        foo: true
     }
-}).catch(e=>console.log(e))
-
-
-
-
-
-
+}).catch(e => console.log(e));
