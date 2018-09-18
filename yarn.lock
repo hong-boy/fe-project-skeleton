@@ -379,7 +379,7 @@ chalk@2.3.1:
     escape-string-regexp "^1.0.5"
     supports-color "^5.2.0"
 
-chalk@^2.0.0, chalk@^2.0.1, chalk@^2.1.0:
+chalk@^2.0.0, chalk@^2.0.1, chalk@^2.1.0, chalk@^2.4.1:
   version "2.4.1"
   resolved "http://r.cnpmjs.org/chalk/download/chalk-2.4.1.tgz#18c49ab16a037b6eb0152cc83e3471338215b66e"
   dependencies:
@@ -1359,6 +1359,12 @@ jstransformer-handlebars@^1.1.0:
   dependencies:
     handlebars "^4.0.1"
 
+jstransformer-mustache@^0.1.1:
+  version "0.1.1"
+  resolved "http://r.cnpmjs.org/jstransformer-mustache/download/jstransformer-mustache-0.1.1.tgz#8bdff19df9d9c20e79bd7b15da9f1de09bf7c7cd"
+  dependencies:
+    mustache "^2.1.2"
+
 jstransformer@^1.0.0:
   version "1.0.0"
   resolved "http://r.cnpmjs.org/jstransformer/download/jstransformer-1.0.0.tgz#ed8bf0921e2f3f1ed4d5c1a44f68709ed24722c3"
@@ -1622,6 +1628,10 @@ ms@2.0.0:
 ms@^2.1.1:
   version "2.1.1"
   resolved "http://r.cnpmjs.org/ms/download/ms-2.1.1.tgz#30a5864eb3ebb0a66f2ebe6d727af06a09d86e0a"
+
+mustache@^2.1.2:
+  version "2.3.2"
+  resolved "http://r.cnpmjs.org/mustache/download/mustache-2.3.2.tgz#a6d4d9c3f91d13359ab889a812954f9230a3d0c5"
 
 mute-stream@0.0.7:
   version "0.0.7"
@@ -1938,6 +1948,10 @@ readable-stream@^2.1.5:
     safe-buffer "~5.1.1"
     string_decoder "~1.1.1"
     util-deprecate "~1.0.1"
+
+readline-sync@^1.4.9:
+  version "1.4.9"
+  resolved "http://r.cnpmjs.org/readline-sync/download/readline-sync-1.4.9.tgz#3eda8e65f23cd2a17e61301b1f0003396af5ecda"
 
 redent@^2.0.0:
   version "2.0.0"

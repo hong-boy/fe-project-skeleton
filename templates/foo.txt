@@ -1,3 +1,1 @@
-{{#if foo}}
-  this is hbs
-{{/if}}
+  Hello {{project}}, this is hbs

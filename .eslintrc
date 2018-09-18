@@ -1,3 +1,16 @@
 {
-    "extends": ["airbnb-base"]
+    "extends": ["airbnb-base"],
+    "env": {
+        "browser": true,
+        "es6": true,
+        "node": true
+    },
+    "rules": {
+        "comma-dangle": 0,
+        "no-console": 1,
+        "indent": [2, 4],
+        "quotes": [2, "double"],
+        "import/no-extraneous-dependencies": 1,
+        "no-shadow": 1
+    }
 }

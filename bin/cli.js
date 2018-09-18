@@ -1,9 +1,12 @@
-const pkg = require("../package.json");
 const program = require("commander");
 const path = require("path");
-const mkdir = require("mkdirp");
-const fs = require("mz/fs");
+const mkdirp = require("mkdirp");
+// const fs = require("mz/fs");
+// const chalk = require("chalk");
+const readline = require("readline-sync");
 const kopy = require("kopy");
+const mustache = require("jstransformer-mustache");
+const pkg = require("../package.json");
 
 // 获取项目根路径
 const ROOT_DIR = path.join(__dirname, "..");
@@ -14,23 +17,54 @@ const TEMPLATES_DIR = path.join(ROOT_DIR, "templates");
 program
     .name(pkg.version)
     .version(pkg.version, " --version")
-    .usage("[options] [dir]")
     .parse(process.argv);
 
 // 获取模板目录
 const dest = program.args.shift() || "./";
 
-console.log(dest);
+// 问答交互
+function inquiry() {
+    const project = readline.question("Please input project name ($<defaultInput>): ", {
+        defaultInput: "fe-hello-world"
+    });
 
-// 生成目标目录
-// TODO - 判断目标目录是否为空
-// 如果目标目录为空或者不存在，则直接创建
-// 如果目标目录不为空，则提示可能会覆盖同名文件
-mkdir(dest);
+    return { project };
+}
 
-kopy(TEMPLATES_DIR, dest, {
-    template: require("jstransformer-handlebars"),
-    data: {
-        foo: true
-    }
-}).catch(e => console.log(e));
+function mkdir(dir) {
+    // 生成目标目录
+    // TODO - 判断目标目录是否为空
+    // 如果目标目录为空或者不存在，则直接创建
+    // 如果目标目录不为空，则提示可能会覆盖同名文件
+    mkdirp(dir);
+}
+
+// 直接复制普通文件
+async function copyFiles(src, dest) {
+    // TODO - kopy默认使用ejs引擎来解析文件、默认忽略二进制文件，因此要特别处理
+    await kopy(src, dest, {
+        glob: ["**", "!**/*.mustache"]
+    });
+}
+// 拷贝.mustache文件
+async function copyMustacheFiles(src, dest, locals) {
+    kopy(src, dest, {
+        glob: ["**/*.mustache"],
+        template: mustache,
+        data: {
+            locals
+        },
+        move: {
+            "*.mustache": filepath => filepath.replace(/(\.mustache)$/, "")
+        }
+    });
+}
+
+async function startup() {
+    const locals = await inquiry();
+    await mkdir(dest);
+    copyFiles(TEMPLATES_DIR, dest);
+    copyMustacheFiles(TEMPLATES_DIR, dest, locals);
+}
+
+startup();
