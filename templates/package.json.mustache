@@ -1,40 +1,34 @@
 {
     "name": "{{locals.project}}",
-    "version": "0.0.1",
-    "description": "A private skeleton for inner projects",
-    "main": "index.js",
-    "license": "BSD",
+    "version": "{{locals.version}}",
+    "description": "{{locals.desc}}",
     "private": true,
-    "devDependencies": {
-      "@commitlint/cli": "^7.1.2",
-      "@commitlint/config-angular": "^7.1.2",
-      "auto-changelog": "^1.8.0",
-      "eslint": "^5.6.0",
-      "eslint-config-airbnb-base": "^13.1.0",
-      "eslint-plugin-import": "^2.14.0",
-      "eslint-plugin-node": "^7.0.1",
-      "eslint-plugin-promise": "^4.0.1",
-      "eslint-plugin-standard": "^4.0.0",
-      "husky": "^0.14.3"
-    },
-    "bin": {
-      "skeleton": "./bin/cli.js"
+    "scripts": {
+        "start": "roadhog server",
+        "build": "roadhog build",
+        "lint": "eslint --ext .js src test",
+        "precommit": "npm run lint"
     },
     "dependencies": {
-      "commander": "^2.18.0",
-      "chalk": "^2.4.1",
-      "jstransformer-handlebars": "^1.1.0",
-      "jstransformer-mustache": "^0.1.1",
-      "kopy": "^8.3.1",
-      "mkdirp": "^0.5.1",
-      "mz": "^2.7.0",
-      "readline-sync": "^1.4.9"
+        "dva": "^2.4.0",
+        "react": "^16.2.0",
+        "react-dom": "^16.2.0"
     },
-    "scripts": {
-      "tpl": "node ./bin/cli.js",
-      "eslint": "eslint bin",
-      "precommit": "yarn run eslint",
-      "commitmsg": "commitlint -E GIT_PARAMS"
-    }
-  }
-  
+    "devDependencies": {
+        "babel-plugin-dva-hmr": "^0.3.2",
+        "eslint": "^4.14.0",
+        "eslint-config-umi": "^0.1.1",
+        "eslint-plugin-flowtype": "^2.34.1",
+        "eslint-plugin-import": "^2.6.0",
+        "eslint-plugin-jsx-a11y": "^5.1.1",
+        "eslint-plugin-react": "^7.1.0",
+        "redbox-react": "^1.4.3",
+        "roadhog": "^2.0.0",
+        "@commitlint/cli": "^7.1.2",
+        "@commitlint/config-angular": "^7.1.2",
+        "auto-changelog": "^1.8.0",
+        "eslint-config-airbnb-base": "^13.1.0",
+        "husky": "^0.14.3"
+    },
+    "license": "BSD"
+}

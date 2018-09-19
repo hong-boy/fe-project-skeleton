@@ -3,8 +3,11 @@ const path = require("path");
 const mkdirp = require("mkdirp");
 // const fs = require("mz/fs");
 // const chalk = require("chalk");
+const ora = require("ora");
 const readline = require("readline-sync");
+const which = require("which");
 const kopy = require("kopy");
+const spawn = require("cross-spawn");
 const mustache = require("jstransformer-mustache");
 const pkg = require("../package.json");
 
@@ -12,23 +15,41 @@ const pkg = require("../package.json");
 const ROOT_DIR = path.join(__dirname, "..");
 // 获取templates目录
 const TEMPLATES_DIR = path.join(ROOT_DIR, "templates");
+const spinner = ora();
 
 // 定义命令行选项参数
 program
-    .name(pkg.version)
+    .name(pkg.name)
     .version(pkg.version, " --version")
+    .usage("[options] [dir]")
+    .on("--help", () => {})
     .parse(process.argv);
 
 // 获取模板目录
-const dest = program.args.shift() || "./";
+const dest = program.args.shift() || ".";
+
+function question(msg, defaultInput, options) {
+    return readline.question(msg, {
+        defaultInput,
+        ...options
+    });
+}
 
 // 问答交互
 function inquiry() {
-    const project = readline.question("Please input project name ($<defaultInput>): ", {
-        defaultInput: "fe-hello-world"
-    });
+    const project = question(
+        "Please input project name: ($<defaultInput>)",
+        "fe-hello-world"
+    );
 
-    return { project };
+    const version = question(
+        "Please input project version: ($<defaultInput>)",
+        "0.0.1"
+    );
+
+    const desc = question("Please input project desc:", "");
+
+    return { project, version, desc };
 }
 
 function mkdir(dir) {
@@ -60,11 +81,48 @@ async function copyMustacheFiles(src, dest, locals) {
     });
 }
 
+// 查找nodejs包管理器，优先使用yarn
+function getCmd() {
+    let cmd = null;
+    try {
+        cmd = which.sync("yarn.cmd");
+    } catch (error) {
+        cmd = which.sync("npm.cmd");
+    } finally {
+        console.log("Use [%s]", cmd);
+    }
+    return cmd;
+}
+
+// 安装依赖
+function install() {
+    const installDeps = question(
+        "Would you like to install dependency automaticlly? (Y/n)",
+        "y"
+    );
+    if (!!~["y", "yes"].indexOf(installDeps.toLowerCase())) {
+        // 自动安装依赖
+        // 查找npm或yarn路径
+        let cmd = getCmd();
+        process.chdir(dest);
+        spawn.sync(cmd, ["install"], { stdio: "inherit" });
+    }
+}
+
 async function startup() {
     const locals = await inquiry();
     await mkdir(dest);
-    copyFiles(TEMPLATES_DIR, dest);
-    copyMustacheFiles(TEMPLATES_DIR, dest, locals);
+    // console.log(`Start to generate directory [${dest}]`); // eslint-disable-line
+    spinner.start(`generating directory [${dest}]...`);
+    await Promise.all([
+        copyFiles(TEMPLATES_DIR, dest),
+        copyMustacheFiles(TEMPLATES_DIR, dest, locals)
+    ]);
+    spinner.succeed();
+    // console.log("Generating directory done"); // eslint-disable-line
+    install();
+    spinner.succeed("All done").stop();
 }
 
+// 入口
 startup();
