@@ -13,6 +13,8 @@
         "import/no-extraneous-dependencies": 1,
         "no-shadow": 1,
         "linebreak-style": 1,
-        "no-plusplus": 1
+        "no-plusplus": 1,
+        "no-bitwise": 1,
+        "no-extra-boolean-cast": 1
     }
 }

@@ -100,12 +100,12 @@ function install() {
         "Would you like to install dependency automaticlly? (Y/n)",
         "y"
     );
-    if (!!~["y", "yes"].indexOf(installDeps.toLowerCase())) {
+    if (~["y", "yes"].indexOf(installDeps.toLowerCase())) {
         // 自动安装依赖
-        // 查找npm或yarn路径
-        let cmd = getCmd();
+        // 进入工作目录
         process.chdir(dest);
-        spawn.sync(cmd, ["install"], { stdio: "inherit" });
+        // 查找npm或yarn路径
+        spawn.sync(getCmd(), ["install"], { stdio: "inherit" });
     }
 }
 

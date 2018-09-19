@@ -37,7 +37,7 @@
   "scripts": {
     "tpl": "node ./bin/cli.js",
     "eslint": "eslint bin",
-    "precommit": "yarn run eslint",
+    "precommit": "npm run eslint",
     "commitmsg": "commitlint -E GIT_PARAMS"
   }
 }
