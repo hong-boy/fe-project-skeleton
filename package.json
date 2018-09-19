@@ -2,7 +2,7 @@
   "name": "fe-project-skeleton",
   "version": "0.0.1",
   "description": "A private skeleton for inner projects",
-  "main": "index.js",
+    "main":"bin/cli.js",
   "license": "BSD",
   "private": true,
   "devDependencies": {
