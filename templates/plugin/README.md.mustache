@@ -1,0 +1,50 @@
+# {{locals.project}}组件
+> 选择用户组件
+
+## 依赖
+
+- 全局变量
+
+> 请确保项目中配置了```window.Sysconfig.apiOrigin```，形如：
+
+```javascript
+window.Sysconfig.apiOrigin = "http://192.168.105.235/v0.1/"
+```
+
+- 第三方依赖包
+
+> 首先保证项目中安装好如下依赖包：antd、dva、react
+> 若没有，则执行命令手动安装：```npm install antd dva react```
+
+##  安装
+
+```
+npm install {{locals.project}} --registry=http://192.168.110.26:8088/repository/npm/
+
+or
+
+yarn add {{locals.project}} --registry=http://192.168.110.26:8088/repository/npm/
+```
+
+##  使用
+
+- {{locals.moduleName}}
+
+```react
+import {{locals.moduleName}} from "{{locals.project}}"
+
+// 渲染 - {{locals.moduleName}}
+class MyComponent extends React.Component {
+render(){
+return (<{{locals.moduleName}} />);
+}
+}
+```
+
+
+## 属性说明
+
+| 成员 | 说明   | 类型 | 默认值 |
+| ---- | ------ | ---- | ------ |
+| sth  | 必填； |      | -      |
+

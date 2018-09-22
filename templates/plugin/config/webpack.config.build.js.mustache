@@ -1,0 +1,126 @@
+const webpack = require("webpack");
+const path = require("path");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const CleanWebpackPlugin = require("clean-webpack-plugin");
+
+const rootdir = path.join(__dirname, "../");
+
+module.exports = {
+entry: {
+bundle: [path.join(rootdir, "src/build.js")]
+},
+output: {
+path: path.join(rootdir, "dist/"),
+publicPath: "",
+filename: "[name].js",
+library: "{{locals.moduleName}}",
+libraryTarget: "umd"
+},
+externals: {
+react: "react",
+antd: "antd",
+dva: "dva"
+},
+resolve: {
+extensions: [".web.js", ".mjs", ".js", ".json", ".web.jsx", ".jsx"],
+alias: {
+"@components": path.join(__dirname, "../src/components"),
+'@utils': path.join(__dirname, '../src/utils'),
+'@fetch': path.join(__dirname, '../src/utils/fetch.js'),
+'@events': path.join(__dirname, '../src/utils/events.js'),
+}
+},
+module: {
+rules: [
+{
+test: /\.(js|jsx|mjs)$/,
+enforce: "pre",
+use: [
+{
+options: {
+formatter: require("react-dev-utils/eslintFormatter"),
+eslintPath: require.resolve("eslint")
+},
+loader: require.resolve("eslint-loader")
+}
+]
+},
+{
+test: /\.(js|jsx|mjs)$/,
+loader: require.resolve("babel-loader"),
+options: {
+compact: true
+}
+},
+{
+test: /\.css$/,
+loader: ExtractTextPlugin.extract(
+Object.assign(
+{
+fallback: {
+loader: require.resolve("style-loader"),
+options: {
+hmr: false
+}
+},
+use: [
+{
+loader: require.resolve("css-loader"),
+options: {
+importLoaders: 1,
+minimize: true
+}
+}
+]
+},
+{}
+)
+)
+},
+{
+test: /\.less$/,
+use: [
+require.resolve('style-loader'),
+{
+loader: require.resolve('css-loader'),
+options: {
+importLoaders: 1,
+modules: true,
+localIndentName: '[name]-[local]__[hash:base64:5]'
+},
+},
+{loader: require.resolve('less-loader')},
+],
+},
+{test: /\.(jpg|png|svg|eot|ttf|woff|woff2)$/, use: ["file-loader"]}
+]
+},
+plugins: [
+new CleanWebpackPlugin(["dist"], {root: rootdir}),
+new webpack.optimize.UglifyJsPlugin({
+compress: {
+warnings: false,
+// Disabled because of an issue with Uglify breaking seemingly valid code:
+// https://github.com/facebookincubator/create-react-app/issues/2376
+// Pending further investigation:
+// https://github.com/mishoo/UglifyJS2/issues/2011
+comparisons: false,
+},
+mangle: {
+safari10: true,
+},
+output: {
+comments: false,
+// Turned on because emoji and regex is not minified properly using default
+// https://github.com/facebookincubator/create-react-app/issues/2488
+ascii_only: true,
+}
+}),
+new ExtractTextPlugin("bundle.css"),
+new webpack.DefinePlugin({
+"process.env": {
+NODE_ENV: JSON.stringify("production")
+}
+})
+]
+};

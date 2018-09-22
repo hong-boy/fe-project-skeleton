@@ -5,3 +5,4 @@ yarn.lock
 .eslintignore
 .editorconfig
 .commitlintrc.json
+test/

@@ -1,8 +1,6 @@
 {
     "extends": ["airbnb-base", "prettier"],
     "env": {
-        "browser": true,
-        "es6": true,
         "node": true
     },
     "rules": {
@@ -15,6 +13,7 @@
         "linebreak-style": 1,
         "no-plusplus": 1,
         "no-bitwise": 1,
-        "no-extra-boolean-cast": 1
+        "no-extra-boolean-cast":1,
+        "consistent-return":1
     }
 }

@@ -1,0 +1,9 @@
+src/
+scripts/
+public/
+config/
+.history/
+.idea/
+.vscode/
+yarn.lock
+*.log
