@@ -52,7 +52,7 @@ function question(msg, defaultInput, options) {
 }
 
 /**
- * 问卷调查
+ * 通用问卷调查
  * @param {string} dir
  * @param {function} anotherQuestions 可选
  */
@@ -128,6 +128,7 @@ function getCmd() {
     for (let i = 0; i < managers.length; i++) {
         try {
             cmd = which.sync(managers[i]);
+            // eslint-disable-next-line
             console.log("包管理器: ", managers[i]);
             break;
         } catch (e) {

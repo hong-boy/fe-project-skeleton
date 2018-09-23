@@ -16,18 +16,26 @@ const {
 
 const spinner = ora();
 
-
-function anotherQuestions(answers) {
-    const moduleName = question(
-        "Please input exported module name: ($<defaultInput>) ",
-        answers.project,
-        {
-            validate: () => {
+/**
+ * 问卷
+ * @param {object} cmd 对应命令的参数选项，如：init命令的参数选项为{web, plugin, webOnly}
+ * @param {object} answers
+ */
+function anotherQuestions(cmd, answers) {
+    const result = {};
+    if(cmd.plugin){
+        const moduleName = question(
+            "Please input exported module name: ($<defaultInput>) ",
+            answers.project,
+            {
+                validate: () => {
+                },
             },
-        },
-    );
+        );
+        result.moduleName = moduleName;
+    }
 
-    return {moduleName};
+    return result;
 }
 
 async function action(dir, {web, plugin, webOnly}) {
@@ -40,7 +48,7 @@ async function action(dir, {web, plugin, webOnly}) {
     const enableWebOnly = webOnly; // 启用 "--web-only"
     const enablePlugin = plugin; // 启用 "--plugin"
 
-    // 若没有传入参数，则使用"--web"作为默认参数
+    // 若没有传入配置参数，则使用"--web"作为默认配置参数
     if (!(web || plugin || webOnly)) {
         // eslint-disable-next-line
         console.log(
@@ -58,7 +66,7 @@ async function action(dir, {web, plugin, webOnly}) {
     const src = path.join(TEMPLATES_DIR, subDir);
 
     // 开启问卷
-    const locals = await inquiry(dir, enablePlugin && anotherQuestions);
+    const locals = inquiry(dir, anotherQuestions.bind(null, {web, plugin, webOnly}));
 
     // 创建新目录
     mkdir(dir);
@@ -74,7 +82,7 @@ async function action(dir, {web, plugin, webOnly}) {
 }
 
 function printHelp({commandName}) {
-    /* eslint-disable */
+    /* eslint-disable no-console */
     console.log("");
     console.log("Examples:");
     console.log("");
@@ -86,7 +94,7 @@ function printHelp({commandName}) {
     console.log(
         `  $ ${commandName} init  --plugin react-hello-world-plugin-web`,
     );
-    /* eslint-enable */
+    /* eslint-enable no-console */
 }
 
 /**
