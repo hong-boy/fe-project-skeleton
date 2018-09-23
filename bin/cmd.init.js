@@ -1,12 +1,12 @@
 const ora = require("ora");
 const path = require("path");
 const chalk = require("chalk");
+const inquirer = require("inquirer");
 
 const {
     isLegalDirName,
     isExistDir,
     inquiry,
-    question,
     mkdir,
     copyFiles,
     copyMustacheFiles,
@@ -21,21 +21,19 @@ const spinner = ora();
  * @param {object} cmd 对应命令的参数选项，如：init命令的参数选项为{web, plugin, webOnly}
  * @param {object} answers
  */
-function anotherQuestions(cmd, answers) {
-    const result = {};
+async function anotherQuestions(cmd, answers) {
+    let answer = {};
+
     if(cmd.plugin){
-        const moduleName = question(
-            "Please input exported module name: ($<defaultInput>) ",
-            answers.project,
-            {
-                validate: () => {
-                },
-            },
-        );
-        result.moduleName = moduleName;
+        answer = await inquirer.prompt({
+            type: "input",
+            name: "moduleName",
+            message: "请输入被导出的模块名称:",
+            default: answers.project
+        });
     }
 
-    return result;
+    return {...answer};
 }
 
 async function action(dir, {web, plugin, webOnly}) {
@@ -66,18 +64,18 @@ async function action(dir, {web, plugin, webOnly}) {
     const src = path.join(TEMPLATES_DIR, subDir);
 
     // 开启问卷
-    const locals = inquiry(dir, anotherQuestions.bind(null, {web, plugin, webOnly}));
+    const locals = await inquiry(dir, anotherQuestions.bind(null, {web, plugin, webOnly}));
 
     // 创建新目录
     mkdir(dir);
-    spinner.start(`生成新项目目录 [${dir}]...`);
+    spinner.start(`生成新项目目录 [${dir}]`);
     await Promise.all([
         copyFiles(src, dir),
         copyMustacheFiles(src, dir, locals),
     ]);
     spinner.succeed();
     // 是否自动安装依赖
-    install(dir);
+    await install(dir);
     spinner.succeed("完成！").stop();
 }
 

@@ -1,5 +1,28 @@
 # {{locals.project}}组件
-> 选择用户组件
+> {{locals.desc}}
+
+## 目录说明
+```
+config/webpack.config.build.js: 组件打包配置文件
+
+dist: 存放编译后的文件
+
+mock: 存放模拟数据
+
+src/build.js: 组件打包入口文件
+```
+
+## 开发
+```
+npm start // 启动项目，组件的编写方式参见HelloWorld
+```
+
+## 打包
+1. 执行build命令：```npm run build```
+2. ```dist/bundle.js```即是打包后的文件
+
+## git commit message格式
+> 参见 http://npm.taobao.org/package/@commitlint/config-angular
 
 ## 依赖
 
@@ -36,7 +59,7 @@ import {{locals.moduleName}} from "{{locals.project}}"
 // 渲染 - {{locals.moduleName}}
 class MyComponent extends React.Component {
 render(){
-return (<{{locals.moduleName}} />);
+return (<{{locals.project}} />);
 }
 }
 ```

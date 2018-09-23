@@ -1,6 +1,6 @@
 const fs = require("fs-extra");
 const path = require("path");
-const readline = require("readline-sync");
+const inquirer = require("inquirer");
 const mustache = require("jstransformer-mustache");
 const kopy = require("kopy");
 const chalk = require("chalk");
@@ -38,45 +38,42 @@ function isExistDir(dir) {
 }
 
 /**
- * 提问
- * @param {string} msg 问题描述
- * @param {string} defaultInput 默认答案
- * @param {object} options
- */
-function question(msg, defaultInput, options) {
-    // TODO - 似乎不支持中文
-    return readline.question(msg, {
-        defaultInput,
-        ...options,
-    });
-}
-
-/**
  * 通用问卷调查
  * @param {string} dir
  * @param {function} anotherQuestions 可选
  */
-function inquiry(dir, anotherQuestions) {
-    const project = question(
-        "Please input project name: ($<defaultInput>) ",
-        dir,
-    );
+async function inquiry(dir, anotherQuestions){
 
-    const version = question(
-        "Please input project version: ($<defaultInput>) ",
-        "0.0.1",
-    );
+    const questions = [
+        {
+            type: "input",
+            name: "project",
+            message: "请输入项目名称:",
+            default: dir
+        },
+        {
+            type: "input",
+            name: "version",
+            message: "请输入项目版本号:",
+            default: "0.0.1"
+        },
+        {
+            type: "input",
+            name: "desc",
+            message: "请输入项目描述:"
+        }
+    ];
 
-    const desc = question("Please input description: ", "");
-
+    const answers = await inquirer.prompt(questions);
     // 扩展
     let anotherAnswers = {};
     if (typeof anotherQuestions === "function") {
-        anotherAnswers = anotherQuestions({project, version, desc});
+        anotherAnswers = await anotherQuestions(answers);
     }
 
-    return {project, version, desc, ...anotherAnswers};
+    return {...answers, ...anotherAnswers};
 }
+
 
 /**
  * 创建项目根目录
@@ -146,12 +143,16 @@ function getCmd() {
 /**
  * 安装依赖
  */
-function install(dest) {
-    const installDeps = question(
-        "Would you like to install dependency automaticlly? (Y/n) ",
-        "y",
-    );
-    if (["y", "yes"].indexOf(installDeps.toLowerCase()) !== -1) {
+async function install(dest) {
+
+    const {isInstall} = await inquirer.prompt({
+        type: "confirm",
+        name: "isInstall",
+        message: "是否自动安装依赖包:",
+        default: true
+    });
+
+    if (isInstall) {
         // 进入新项目目录
         process.chdir(dest);
         // 执行npm install
@@ -165,7 +166,6 @@ module.exports = {
     isLegalDirName,
     isExistDir,
     inquiry,
-    question,
     mkdir,
     copyFiles,
     copyMustacheFiles,

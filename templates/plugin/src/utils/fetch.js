@@ -2,13 +2,14 @@ import fetch from "dva/fetch";
 
 let baseUrl = null;
 
-const options = {
+const opts = {
     method: "get",
     headers: {
         "Content-Type": "application/json",
     },
     body: null,
     redirect: "error",
+    cache: "reload",
 
     // The following properties are node-fetch extensions
     follow: 20,
@@ -24,7 +25,7 @@ function getBaseUrl() {
     if (!baseUrl) {
         // 优先使用全局对象中的配置，否则默认使用测试环境地址
         const Sysconfig = window.Sysconfig || {};
-        baseUrl = Sysconfig.apiOrigin || "http://192.168.105.235/v0.1/";
+        baseUrl = Sysconfig.apiOrigin ||  "/"; // "http://192.168.105.235/v0.1/";
         baseUrl = /\/$/.test(baseUrl) ? baseUrl : `${baseUrl}/`;
     }
     return baseUrl;
@@ -51,12 +52,19 @@ export default function request(method, url, options) {
         let ret = await fetch(
             assembleUrl(url),
             {
+                ...opts,
                 ...options,
-                method: "get",
+                method,
             },
         );
-
-        resolve(ret.json());
+        let body = null;
+        let cloned = ret.clone();
+        try {
+            body = await ret.json();
+        }catch(e){
+            body = await cloned.text();
+        }
+        resolve({ok: ret.ok, body});
     });
 }
 

@@ -3,6 +3,8 @@
 const errorOverlayMiddleware = require("react-dev-utils/errorOverlayMiddleware");
 const noopServiceWorkerMiddleware = require("react-dev-utils/noopServiceWorkerMiddleware");
 const ignoredFiles = require("react-dev-utils/ignoredFiles");
+const mocker = require("webpack-api-mocker");
+const path = require("path");
 const config = require("./webpack.config.dev");
 const paths = require("./paths");
 
@@ -90,6 +92,9 @@ module.exports = function(proxy, allowedHost) {
             // it used the same host and port.
             // https://github.com/facebookincubator/create-react-app/issues/2272#issuecomment-302832432
             app.use(noopServiceWorkerMiddleware());
+
+            // mock server
+            mocker(app, path.join(__dirname, "../mock/index.js"));
         },
     };
 };

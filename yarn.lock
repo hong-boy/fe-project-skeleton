@@ -1150,7 +1150,7 @@ inquirer@^3.2.3:
     strip-ansi "^4.0.0"
     through "^2.3.6"
 
-inquirer@^6.1.0:
+inquirer@^6.1.0, inquirer@^6.2.0:
   version "6.2.0"
   resolved "http://r.cnpmjs.org/inquirer/download/inquirer-6.2.0.tgz#51adcd776f661369dc1e894859c2560a224abdd8"
   dependencies:
@@ -1985,10 +1985,6 @@ readable-stream@^2.1.5:
     safe-buffer "~5.1.1"
     string_decoder "~1.1.1"
     util-deprecate "~1.0.1"
-
-readline-sync@^1.4.9:
-  version "1.4.9"
-  resolved "http://r.cnpmjs.org/readline-sync/download/readline-sync-1.4.9.tgz#3eda8e65f23cd2a17e61301b1f0003396af5ecda"
 
 redent@^2.0.0:
   version "2.0.0"
