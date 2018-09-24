@@ -5,7 +5,7 @@
 ## 意义
 > 提升开发效率、推进团队开发规范落地，统一的开发规范有利于新人快速融入。通过如下形式体现：
 1. 节省重复劳动
-2. 内置eslint\commitlint规范，再配合git hooks，强制团队成员遵守规范
+2. 内置eslint\commitlint规范，配合git hooks强制团队成员遵守规范
 
 ## 如何制作
 - 思路
@@ -28,7 +28,7 @@
 > 检测客户端环境下npm/yarn的安装路径
 - commander
 > 提供命令行工具
-- readline-sync
+- readline-sync/inquirer
 > 提供用户对话交互
 - kopy
 > 复制文件夹，同时支持模板编译
@@ -47,7 +47,7 @@ templates/plugin: 存放通用组件项目模板
 tempaltes/web: 存放web项目模板
 ```
 
-### 项目目录结构说明
+### 项目模板目录说明
 - plugin
 - web
 
